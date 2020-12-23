@@ -1386,7 +1386,7 @@ input::placeholder {
   z-index: -999;
   width: 100%;
   height: 100%;
-  background: url(http://liki-img.test.upcdn.net/pictures/87eecd8d8b6df52a3c4a92164358dc037eb150f2.jpg);
+  background: #efefef;
   background-attachment: local;
   background-position: center;
   -webkit-background-size: cover;
