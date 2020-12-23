@@ -6,7 +6,6 @@
     src: local('Permanent Marker Regular'), local('PermanentMarker-Regular'), url(/fonts/Fh4uPib9Iyv2ucM6pGQMWimMp004La2Cfw.woff2) format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
-
 #web_bg {
     /* 背景图像的地址（url括号里） */
     background: url(http://liki-img.test.upcdn.net/pictures/87eecd8d8b6df52a3c4a92164358dc037eb150f2.jpg);
