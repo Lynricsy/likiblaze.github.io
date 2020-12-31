@@ -312,6 +312,13 @@
   </url>
   
   <url>
+    <loc>http://likiblaze.gitee.io/tags/C-%E5%9F%BA%E7%A1%80/</loc>
+    <lastmod>2020-12-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://likiblaze.gitee.io/tags/%E6%B4%9B%E8%B0%B7/</loc>
     <lastmod>2020-12-31</lastmod>
     <changefreq>daily</changefreq>
@@ -333,14 +340,14 @@
   </url>
   
   <url>
-    <loc>http://likiblaze.gitee.io/tags/C-%E5%9F%BA%E7%A1%80/</loc>
+    <loc>http://likiblaze.gitee.io/tags/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/</loc>
     <lastmod>2020-12-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://likiblaze.gitee.io/tags/%E8%BF%90%E7%AE%97%E7%AC%A6%E9%87%8D%E8%BD%BD/</loc>
+    <loc>http://likiblaze.gitee.io/tags/%E9%80%92%E6%8E%A8/</loc>
     <lastmod>2020-12-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -355,13 +362,6 @@
   
   <url>
     <loc>http://likiblaze.gitee.io/tags/%E4%BA%8C%E5%88%86%E5%9B%BE%E6%9C%80%E5%A4%A7%E5%8C%B9%E9%85%8D/</loc>
-    <lastmod>2020-12-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://likiblaze.gitee.io/tags/%E9%80%92%E6%8E%A8/</loc>
     <lastmod>2020-12-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
