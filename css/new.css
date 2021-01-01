@@ -8,7 +8,7 @@
 }
 #web_bg {
     /* 背景图像的地址（url括号里） */
-    background: url(https://foxex.coding.net/p/PicBed/d/PicBed/git/raw/master/pics/v2-c5f53ae19d56a10251e092d9f9f8bd89_r.jpg);
+    background: url(https://cdn.jsdelivr.net/gh/likiblaze/picbed/pics/v2-c5f53ae19d56a10251e092d9f9f8bd89_r.jpg);
     /* 背景图像不重复 */
     background-repeat: no-repeat;
     /* 背景图像大小 */
