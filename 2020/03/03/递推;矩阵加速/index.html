@@ -1,0 +1,341 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>递推;矩阵加速 | LikiBlaze</title><meta name="keywords" content="算法概述,递推,矩阵加速"><meta name="author" content="LikiBlaze"><meta name="copyright" content="LikiBlaze"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="这个题其实很简单，简单分析一下规律，发现发f[i]&#x3D;f[i-1]+f[i-2]。 如下图：   12345678910111213 1 #include&lt;iostream&gt; 2 using namespace std; 3 int main() 4 &amp;#123; 5   int n,i,j,a[101];                   6   cin&gt;&gt;n; 7">
+<meta property="og:type" content="article">
+<meta property="og:title" content="递推;矩阵加速">
+<meta property="og:url" content="https://blog.foxex.cn/2020/03/03/%E9%80%92%E6%8E%A8;%E7%9F%A9%E9%98%B5%E5%8A%A0%E9%80%9F/index.html">
+<meta property="og:site_name" content="LikiBlaze">
+<meta property="og:description" content="这个题其实很简单，简单分析一下规律，发现发f[i]&#x3D;f[i-1]+f[i-2]。 如下图：   12345678910111213 1 #include&lt;iostream&gt; 2 using namespace std; 3 int main() 4 &amp;#123; 5   int n,i,j,a[101];                   6   cin&gt;&gt;n; 7">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://api.r10086.com/%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%886.php">
+<meta property="article:published_time" content="2020-03-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-13T03:17:18.000Z">
+<meta property="article:author" content="LikiBlaze">
+<meta property="article:tag" content="算法概述">
+<meta property="article:tag" content="递推">
+<meta property="article:tag" content="矩阵加速">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://api.r10086.com/%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%886.php"><link rel="shortcut icon" href="https://foxex.coding.net/p/PicBed/d/PicBed/git/raw/master/pics/avatar.jpg"><link rel="canonical" href="https://blog.foxex.cn/2020/03/03/%E9%80%92%E6%8E%A8;%E7%9F%A9%E9%98%B5%E5%8A%A0%E9%80%9F/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/likiblaze/likiblaze.github.io/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://fonts.proxy.ustclug.org/css2?family=Permanent+Marker&amp;display=swap" media="print" onload="this.media='all'"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: {"limitDay":500,"position":"top","messagePrev":"It has been","messageNext":"days since the last update, the content of the article may be outdated."},
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2020-07-13 11:17:18'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'false'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="/css/new.css"><link rel="stylesheet" href="/css/iconfont.min.css"><link rel="stylesheet" href="/css/plugins.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/likiblaze/likiblaze.github.io/css/new.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/likiblaze/likiblaze.github.io/css/iconfont.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/likiblaze/likiblaze.github.io/css/plugins.min.css"><meta name="generator" content="Hexo 5.3.0"><link rel="alternate" href="/atom.xml" title="LikiBlaze" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" data-lazy-src="https://cdn.jsdelivr.net/gh/likiblaze/picbed/pics/avatar.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">24</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/2020/07/11/About/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://api.r10086.com/%E9%A3%8E%E6%99%AF%E7%B3%BB%E5%88%9710.php)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">LikiBlaze</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/2020/07/11/About/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">递推;矩阵加速</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-03-02T16:00:00.000Z" title="发表于 2020-03-03 00:00:00">2020-03-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-07-13T03:17:18.000Z" title="更新于 2020-07-13 11:17:18">2020-07-13</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-separator">|</span><span class="post-meta-commentcount"><i class="far fa-comments fa-fw post-meta-icon"></i><span class="post-meta-label">评论数:</span><a href="/2020/03/03/%E9%80%92%E6%8E%A8;%E7%9F%A9%E9%98%B5%E5%8A%A0%E9%80%9F/#post-comment" itemprop="discussionUrl"><span class="valine-comment-count" data-xid="/2020/03/03/%E9%80%92%E6%8E%A8;%E7%9F%A9%E9%98%B5%E5%8A%A0%E9%80%9F/" itemprop="commentCount"></span></a></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><img src= "/img/loading.gif" data-lazy-src="https://img2020.cnblogs.com/blog/1924270/202003/1924270-20200303084213350-258204603.png" alt="" />
+
+<p>这个题其实很简单，简单分析一下规律，发现发f[i]=f[i-1]+f[i-2]。</p>
+<p>如下图：</p>
+<img src= "/img/loading.gif" data-lazy-src="https://img2020.cnblogs.com/i-beta/1924270/202003/1924270-20200303090245118-1492545993.png" alt="" />
+
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> <span class="number">1</span> <span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"> <span class="number">2</span> <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"> <span class="number">3</span> <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"> 4 </span>&#123;</span><br><span class="line"> <span class="number">5</span>   <span class="keyword">int</span> n,i,j,a[<span class="number">101</span>];                  </span><br><span class="line"> <span class="number">6</span>   <span class="built_in">cin</span>&gt;&gt;n;</span><br><span class="line"> <span class="number">7</span>   a[<span class="number">1</span>]=<span class="number">1</span>;a[<span class="number">2</span>]=<span class="number">2</span>;</span><br><span class="line"> <span class="number">8</span>   <span class="keyword">for</span> (i=<span class="number">3</span>;i&lt;=n;i++) </span><br><span class="line"> <span class="number">9</span>    &#123;</span><br><span class="line"><span class="number">10</span>      a[i]=a[i<span class="number">-1</span>]+a[i<span class="number">-2</span>];</span><br><span class="line"><span class="number">11</span> 　   &#125;</span><br><span class="line"><span class="number">12</span> <span class="built_in">cout</span>&lt;&lt;a[n];</span><br><span class="line"><span class="number">13</span> &#125; </span><br></pre></td></tr></table></figure>
+<p>用这个代码，解决这个题的确很轻松。</p>
+<p>可是只要稍微更改一下数据范围，就完全不一样了：</p>
+<img src= "/img/loading.gif" data-lazy-src="https://img2020.cnblogs.com/blog/1924270/202003/1924270-20200303092801661-773393263.png" alt="" />
+
+<p>这样子，难度就完全不是一个等级了。</p>
+<p>首先是不能开一个10^18^的数组，那样肯定会爆内存。</p>
+<p>我们可以用滚动的数组：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> mod 1e9+7</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> a[<span class="number">4</span>] = &#123;<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    freopen(<span class="string">&quot;brick.in&quot;</span>, <span class="string">&quot;r&quot;</span>, <span class="built_in">stdin</span>);</span><br><span class="line">    freopen(<span class="string">&quot;brick.out&quot;</span>, <span class="string">&quot;w&quot;</span>, <span class="built_in">stdout</span>);</span><br><span class="line">    <span class="keyword">int</span> fbk;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; fbk;</span><br><span class="line">    <span class="keyword">if</span> (fbk==<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (fbk==<span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> yousa = <span class="number">3</span>; yousa &lt;= fbk<span class="number">-2</span>; yousa++)</span><br><span class="line">        &#123;</span><br><span class="line">            a[<span class="number">3</span>] = (a[<span class="number">2</span>] + a[<span class="number">1</span>])%(<span class="keyword">long</span> <span class="keyword">long</span>)(mod);</span><br><span class="line">            a[<span class="number">1</span>] = a[<span class="number">2</span>];</span><br><span class="line">            a[<span class="number">2</span>] = a[<span class="number">3</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; a[<span class="number">3</span>] &lt;&lt; <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    fclose(<span class="built_in">stdin</span>);</span><br><span class="line">    fclose(<span class="built_in">stdout</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试之后发现虽然内存占用很少，但是会超时。</p>
+<p>这就用到我们的矩阵加速了：</p>
+<h3 id="矩阵乘法"><a href="#矩阵乘法" class="headerlink" title="矩阵乘法"></a>矩阵乘法</h3><p>矩阵乘法可以先稍作了解，知道矩阵相乘的运算法则</p>
+<img src= "/img/loading.gif" data-lazy-src="https://images.cnblogs.com/cnblogs_com/huixinxinw/1503711/o_200117131304%E5%9B%BE%E7%89%871.png" alt="img" />
+
+<h3 id="快速幂"><a href="#快速幂" class="headerlink" title="快速幂"></a>快速幂</h3><p>快速幂要求解的是这样一类问题：</p>
+<p>给你A,B,C，求A的B次方模C的余数</p>
+<p>A,C&lt;=10^9^,B&lt;=10^18^</p>
+<p>如果我们线性去求，时间复杂度是O（n）的，但题目中给出的B是很大的数，这样显然会超时,我们可以用快速幂来加速这个过程。</p>
+<p>我们可以想像一下小学的时候我们如何计算2^16^</p>
+<p>2^16^=4^8^=16^4^=256^2^=65536</p>
+<p>那如何计算2^18^呢？</p>
+<p>快速幂同理也是如此</p>
+<p>我们可以按照上面做法，利用分治的思想求去解</p>
+<p>这样原本O(n)的时间复杂度便降到了O(log n )</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> ans=<span class="number">1</span>,base=a;</span><br><span class="line"><span class="keyword">while</span>(n&gt;<span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(n&amp;<span class="number">1</span>)</span><br><span class="line"> 	&#123;</span><br><span class="line">    	ans*=base;</span><br><span class="line">    &#125;</span><br><span class="line">        base*=base;</span><br><span class="line">        n=n/<span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="矩阵快速幂"><a href="#矩阵快速幂" class="headerlink" title="矩阵快速幂"></a>矩阵快速幂</h3><p>矩阵快速幂的原理同快速幂一样，只是转换为了矩阵之间的乘法操作</p>
+<p>所以单纯的重载一下运算符(写成函数的形式也可），将普通的乘法转换为矩阵乘法就好了。</p>
+<h3 id="矩阵加速"><a href="#矩阵加速" class="headerlink" title="矩阵加速"></a>矩阵加速</h3><p>知道那个叫矩阵快速幂的东西后我们可以学矩阵加速了</p>
+<p>斐波那契数列中的每一项都是前两项之和</p>
+<p>我们考虑构造这么一个矩阵：每一次乘上这个矩阵都能从f[n-1],f[n-2]两项向后递推到f[n-1],f[n]这两项</p>
+<p>那么关键就是如何构造这样的矩阵</p>
+<p>对于这样一个矩阵我们有</p>
+<p>所以我们将每一次两项相加转换为了乘以一个转移矩阵</p>
+<p>既然是乘法，每次乘以的也是同一个矩阵</p>
+<p>我们可以利用矩阵快速幂的思想对于求解斐波那契数列加速</p>
+<p>代码实现基本上是一致的，只需要构造一个转移矩阵来进行状态之间的转移即可</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">mat</span>&#123;</span></span><br><span class="line">    ll m[<span class="number">5</span>][<span class="number">5</span>];</span><br><span class="line">&#125;a,ans;</span><br><span class="line">ll n,b,k; </span><br><span class="line"><span class="function">mat <span class="title">mul</span><span class="params">(mat x,mat y,<span class="keyword">int</span> flag)</span></span>&#123;</span><br><span class="line">    mat c;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=<span class="number">2</span>;i++)</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=<span class="number">2</span>;j++)</span><br><span class="line">            c.m[i][j]=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=<span class="number">2</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=<span class="number">2</span>;j++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> q=<span class="number">1</span>;q&lt;=<span class="number">2</span>;q++)&#123;</span><br><span class="line">                    c.m[i][j]=(c.m[i][j]+x.m[i][q]*y.m[q][j])%Mod;</span><br><span class="line">        </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> c;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">    a.m[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">1</span>;a.m[<span class="number">1</span>][<span class="number">2</span>]=<span class="number">1</span>;</span><br><span class="line">    a.m[<span class="number">2</span>][<span class="number">1</span>]=<span class="number">1</span>;a.m[<span class="number">2</span>][<span class="number">2</span>]=<span class="number">0</span>;</span><br><span class="line">    b=n<span class="number">-2</span>;</span><br><span class="line">    ans.m[<span class="number">1</span>][<span class="number">1</span>]=<span class="number">1</span>;</span><br><span class="line">    ans.m[<span class="number">1</span>][<span class="number">2</span>]=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span>(b)&#123;</span><br><span class="line">         <span class="keyword">if</span>(b&amp;<span class="number">1</span>)&#123;</span><br><span class="line">            ans=mul(ans,a,<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        a=mul(a,a,<span class="number">2</span>);</span><br><span class="line">        b=b/<span class="number">2</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">if</span>(n==<span class="number">1</span>||n==<span class="number">2</span>)<span class="built_in">cout</span>&lt;&lt;<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="built_in">cout</span>&lt;&lt;ans.m[<span class="number">1</span>][<span class="number">1</span>]%Mod;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样这个题就被解决了！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">LikiBlaze</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://blog.foxex.cn/2020/03/03/%E9%80%92%E6%8E%A8;%E7%9F%A9%E9%98%B5%E5%8A%A0%E9%80%9F/">https://blog.foxex.cn/2020/03/03/%E9%80%92%E6%8E%A8;%E7%9F%A9%E9%98%B5%E5%8A%A0%E9%80%9F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://blog.foxex.cn" target="_blank">LikiBlaze</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%AE%97%E6%B3%95%E6%A6%82%E8%BF%B0/">算法概述</a><a class="post-meta__tags" href="/tags/%E9%80%92%E6%8E%A8/">递推</a><a class="post-meta__tags" href="/tags/%E7%9F%A9%E9%98%B5%E5%8A%A0%E9%80%9F/">矩阵加速</a></div><div class="post_share"><div class="social-share" data-image="https://api.r10086.com/%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%886.php" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/03/09/2020%E5%B9%B43%E6%9C%888%E6%97%A5NOIP%E8%AF%BE%E7%A8%8B%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/"><img class="prev-cover" data-lazy-src="https://acg.xydwz.cn/api/api.php" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">2020年3月8日NOIP课程知识整理</div></div></a></div><div class="next-post pull-right"><a href="/2020/02/06/%E6%B4%9B%E8%B0%B7P1217USACO1.5%E5%9B%9E%E6%96%87%E8%B4%A8%E6%95%B0PrimePalindromes/"><img class="next-cover" data-lazy-src="https://api.r10086.com/%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%889.php" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">洛谷P1217USACO1.5回文质数PrimePalindromes</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2020/03/09/2020年3月8日NOIP课程知识整理/" title="2020年3月8日NOIP课程知识整理"><img class="cover" data-lazy-src="https://acg.xydwz.cn/api/api.php" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-09</div><div class="title">2020年3月8日NOIP课程知识整理</div></div></a></div><div><a href="/2020/07/06/P3372【模板】线段树1/" title="P3372【模板】线段树1"><img class="cover" data-lazy-src="https://tvax3.sinaimg.cn/large/0072Vf1pgy1foxkfj2rfrj31hc0u04ln.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-06</div><div class="title">P3372【模板】线段树1</div></div></a></div><div><a href="/2020/01/27/关于C++读入数字按位取出与进制转换问题/" title="关于C++读入数字按位取出与进制转换问题"><img class="cover" data-lazy-src="https://api.r10086.com/%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%887.php" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-01-27</div><div class="title">关于C++读入数字按位取出与进制转换问题</div></div></a></div><div><a href="/2020/01/30/总结一下当前阶段我认为比较常用的字符串操作/" title="总结一下当前阶段我认为比较常用的字符串操作"><img class="cover" data-lazy-src="https://api.r10086.com/%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%8814.php" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-01-30</div><div class="title">总结一下当前阶段我认为比较常用的字符串操作</div></div></a></div><div><a href="/2020/04/18/最短路径问题的几种算法/" title="最短路径问题的几种算法"><img class="cover" data-lazy-src="https://api.r10086.com/%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%8815.php" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-18</div><div class="title">最短路径问题的几种算法</div></div></a></div><div><a href="/2020/04/18/数据离散化/" title="数据离散化"><img class="cover" data-lazy-src="https://api.r10086.com/%E5%8A%A8%E6%BC%AB%E7%BB%BC%E5%90%8810.php" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-18</div><div class="title">数据离散化</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" data-lazy-src="https://cdn.jsdelivr.net/gh/likiblaze/picbed/pics/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">LikiBlaze</div><div class="author-info__description">Nothing Last Forever.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">24</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">24</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/LikiBlaze"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/likiblaze" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:likiblaze@foxmail.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a><a class="social-icon" href="https://weibo.com/LikiBlaze/" target="_blank" title="Weibo"><i class="fab fa-weibo"></i></a><a class="social-icon" href="https://twitter.com/BlazeLiki" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a><a class="social-icon" href="tencent://message/?uin=2188955531&amp;Site=&amp;Menu=yes" target="_blank" title="QQ"><i class="fab fa-qq"></i></a><a class="social-icon" href="https://www.zhihu.com/people/likiblaze" target="_blank" title=""><i class="iconfont  icon-zhihu2"></i></a><a class="social-icon" href="https://space.bilibili.com/13164198" target="_blank" title=""><i class="iconfont  icon-bilibili1"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A9%E9%98%B5%E4%B9%98%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">矩阵乘法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E9%80%9F%E5%B9%82"><span class="toc-number">2.</span> <span class="toc-text">快速幂</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A9%E9%98%B5%E5%BF%AB%E9%80%9F%E5%B9%82"><span class="toc-number">3.</span> <span class="toc-text">矩阵快速幂</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9F%A9%E9%98%B5%E5%8A%A0%E9%80%9F"><span class="toc-number">4.</span> <span class="toc-text">矩阵加速</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2020/11/26/UOJ-T1-T15-%E9%A2%98%E8%A7%A3/" title="UOJ T1~T15 题解"><img data-lazy-src="https://tvax4.sinaimg.cn/large/0072Vf1pgy1foxk3mu0ztj31hc0u07m5.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UOJ T1~T15 题解"/></a><div class="content"><a class="title" href="/2020/11/26/UOJ-T1-T15-%E9%A2%98%E8%A7%A3/" title="UOJ T1~T15 题解">UOJ T1~T15 题解</a><time datetime="2020-11-26T08:33:08.000Z" title="发表于 2020-11-26 16:33:08">2020-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/11/08/CSP2020%E6%B8%B8%E8%AE%B0/" title="CSP2020游记"><img data-lazy-src="https://foxex.coding.net/p/picbed/d/PicBed/git/raw/master/pics//e5aaf01c833d0f026a3fca3c6c060b1607d38b7d3446c03c400e724b15f221d9.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CSP2020游记"/></a><div class="content"><a class="title" href="/2020/11/08/CSP2020%E6%B8%B8%E8%AE%B0/" title="CSP2020游记">CSP2020游记</a><time datetime="2020-11-08T08:29:00.000Z" title="发表于 2020-11-08 16:29:00">2020-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/07/29/%E5%85%B3%E4%BA%8Eclass/" title="关于class"><img data-lazy-src="https://tvax3.sinaimg.cn/large/0072Vf1pgy1fodqpglwr2j312w0rnx6p.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="关于class"/></a><div class="content"><a class="title" href="/2020/07/29/%E5%85%B3%E4%BA%8Eclass/" title="关于class">关于class</a><time datetime="2020-07-29T14:39:22.000Z" title="发表于 2020-07-29 22:39:22">2020-07-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/07/27/%E5%BE%88%E6%80%A5%E7%9A%84%E7%81%BE%E9%A2%98%E8%A7%A3/" title="很急的灾题解"><img data-lazy-src="https://tvax3.sinaimg.cn/large/0072Vf1pgy1foxlhvnh9qj31hc0u0tmu.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="很急的灾题解"/></a><div class="content"><a class="title" href="/2020/07/27/%E5%BE%88%E6%80%A5%E7%9A%84%E7%81%BE%E9%A2%98%E8%A7%A3/" title="很急的灾题解">很急的灾题解</a><time datetime="2020-07-27T00:18:01.000Z" title="发表于 2020-07-27 08:18:01">2020-07-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/07/20/2020-07-20%E6%B5%8B%E8%AF%95/" title="2020-07-20测试"><img data-lazy-src="https://tvax2.sinaimg.cn/large/0072Vf1pgy1fodqiuq34vj31kw0zkhdt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2020-07-20测试"/></a><div class="content"><a class="title" href="/2020/07/20/2020-07-20%E6%B5%8B%E8%AF%95/" title="2020-07-20测试">2020-07-20测试</a><time datetime="2020-07-20T08:32:18.000Z" title="发表于 2020-07-20 16:32:18">2020-07-20</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By LikiBlaze</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">本网站由<a target="_blank" rel="noopener" href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral"><img src="/images/又拍云_logo6.png"></a>提供CDN/云储存服务</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" type="button" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="https://cdn.jsdelivr.net/gh/likiblaze/likiblaze.github.io/js/utils.js"></script><script src="https://cdn.jsdelivr.net/gh/likiblaze/likiblaze.github.io/js/main.js"></script><script src="https://cdn.jsdelivr.net/gh/likiblaze/likiblaze.github.io/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/gh/likiblaze/likiblaze.github.io/js/search/local-search.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    loader: {
+      source: {
+        '[tex]/amsCd': '[tex]/amscd'
+      }
+    },
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        addClass: [200,() => {
+          document.querySelectorAll('mjx-container:not([display=\'true\']').forEach( node => {
+            const target = node.parentNode
+            if (!target.classList.contains('has-jax')) {
+              target.classList.add('mathjax-overflow')
+            }
+          })
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typeset()
+}</script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>(() => {
+  document.querySelectorAll('#article-container span.katex-display').forEach(item => {
+    btf.wrap(item, 'div', '', 'katex-wrap')
+  })
+})()</script><script>function loadValine () {
+  function initValine () {
+    let initData = {
+      el: '#vcomment',
+      appId: 'eAr0DeReLqljfxB66UTeW7Dc-gzGzoHsz',
+      appKey: 'QtQxNqMWsCyRgID89dz0Sy97',
+      placeholder: '讨论一下？',
+      avatar: 'monsterid',
+      meta: 'nick,mail'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: true,
+      path: window.location.pathname,
+    }
+
+    if (true) { 
+      initData.requiredFields= ('nick'.split(','))
+    }
+    
+    if (false) {
+      const otherData = false
+      initData = Object.assign({}, initData, otherData)
+    }
+    
+    const valine = new Valine(initData)
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.querySelector('#vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/js/xkTool.js"></script><script src="/css/new.js"></script><script src="/css/Valine.min.js"></script><script src="https://cdn.jsdelivr.net/gh/likiblaze/likiblaze.github.io/css/new.js"></script><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/click-heart.min.js" async="async" mobile="false"></script><script>(function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/17cde96a.js","daovoice")
+</script><script>var isChatBtn = true
+daovoice('init', {
+  app_id: '17cde96a',},{
+  launcher: { 
+     disableLauncherIcon: isChatBtn // 悬浮 ICON 是否显示
+  },
+});
+daovoice('update');
+
+if (isChatBtn) {
+  var chatBtnFn = () => {
+    var chatBtn = document.getElementById("chat_btn")
+    chatBtn.addEventListener("click", function(){
+      daovoice('show')
+    });
+  }
+  chatBtnFn()
+} else {
+  if (false) {
+    function chatBtnHide () {
+      daovoice('update', {},{
+        launcher: { 
+        disableLauncherIcon: true // 悬浮 ICON 是否显示
+        },
+      });
+    }
+    function chatBtnShow () {
+      daovoice('update', {},{
+        launcher: { 
+        disableLauncherIcon: false // 悬浮 ICON 是否显示
+        },
+      });
+    }
+  }
+}</script></div></body></html>
