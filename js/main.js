@@ -1,17 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
-  let blogNameWidth = document.getElementById('site-name').offsetWidth
+  const $blogName = document.getElementById('site-name')
+  let blogNameWidth = $blogName && $blogName.offsetWidth
   const $menusEle = document.querySelector('#menus .menus_items')
   let menusWidth = $menusEle && $menusEle.offsetWidth
   const $searchEle = document.querySelector('#search-button')
   let searchWidth = $searchEle && $searchEle.offsetWidth
-  let detectFontSizeChange = false
 
-  const adjustMenu = () => {
-    if (detectFontSizeChange) {
-      blogNameWidth = document.getElementById('site-name').offsetWidth
+  const adjustMenu = (change = false) => {
+    if (change) {
+      blogNameWidth = $blogName && $blogName.offsetWidth
       menusWidth = $menusEle && $menusEle.offsetWidth
       searchWidth = $searchEle && $searchEle.offsetWidth
-      detectFontSizeChange = false
     }
     const $nav = document.getElementById('nav')
     let t
@@ -247,40 +246,38 @@ document.addEventListener('DOMContentLoaded', function () {
  * fancybox和 mediumZoom
  */
   const addFancybox = function (ele) {
-    if (ele.length) {
-      const runFancybox = (ele) => {
-        ele.each(function (i, o) {
-          const $this = $(o)
-          const lazyloadSrc = $this.attr('data-lazy-src') || $this.attr('src')
-          const dataCaption = $this.attr('alt') || ''
-          $this.wrap(`<a href="${lazyloadSrc}" data-fancybox="group" data-caption="${dataCaption}" class="fancybox"></a>`)
-        })
+    const runFancybox = (ele) => {
+      ele.each(function (i, o) {
+        const $this = $(o)
+        const lazyloadSrc = $this.attr('data-lazy-src') || $this.attr('src')
+        const dataCaption = $this.attr('alt') || ''
+        $this.wrap(`<a href="${lazyloadSrc}" data-fancybox="group" data-caption="${dataCaption}" class="fancybox"></a>`)
+      })
 
-        $().fancybox({
-          selector: '[data-fancybox]',
-          loop: true,
-          transitionEffect: 'slide',
-          protect: true,
-          buttons: ['slideShow', 'fullScreen', 'thumbs', 'close'],
-          hash: false
-        })
-      }
+      $().fancybox({
+        selector: '[data-fancybox]',
+        loop: true,
+        transitionEffect: 'slide',
+        protect: true,
+        buttons: ['slideShow', 'fullScreen', 'thumbs', 'close'],
+        hash: false
+      })
+    }
 
-      if (typeof $.fancybox === 'undefined') {
-        $('head').append(`<link rel="stylesheet" type="text/css" href="${GLOBAL_CONFIG.source.fancybox.css}">`)
-        $.getScript(`${GLOBAL_CONFIG.source.fancybox.js}`, function () {
-          runFancybox($(ele))
-        })
-      } else {
+    if (typeof $.fancybox === 'undefined') {
+      $('head').append(`<link rel="stylesheet" type="text/css" href="${GLOBAL_CONFIG.source.fancybox.css}">`)
+      $.getScript(`${GLOBAL_CONFIG.source.fancybox.js}`, function () {
         runFancybox($(ele))
-      }
+      })
+    } else {
+      runFancybox($(ele))
     }
   }
 
   const addMediumZoom = () => {
     const zoom = mediumZoom(document.querySelectorAll('#article-container :not(a)>img'))
     zoom.on('open', e => {
-      const photoBg = $(document.documentElement).attr('data-theme') === 'dark' ? '#121212' : '#fff'
+      const photoBg = document.documentElement.getAttribute('data-theme') === 'dark' ? '#121212' : '#fff'
       zoom.update({
         background: photoBg
       })
@@ -289,7 +286,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const jqLoadAndRun = () => {
     const $fancyboxEle = GLOBAL_CONFIG.lightbox === 'fancybox'
-      ? document.querySelectorAll('#article-container :not(a):not(.gallery-group) > img, #article-container > img') 
+      ? document.querySelectorAll('#article-container :not(a):not(.gallery-group) > img, #article-container > img')
       : []
     const fbLengthNoZero = $fancyboxEle.length > 0
     const $jgEle = document.querySelectorAll('#article-container .justified-gallery')
@@ -318,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let initTop = 0
     let isChatShow = true
-    const $nav = document.getElementById('nav')
+    const $header = document.getElementById('page-header')
     const isChatBtnHide = typeof chatBtnHide === 'function'
     const isChatBtnShow = typeof chatBtnShow === 'function'
     window.addEventListener('scroll', btf.throttle(function (e) {
@@ -326,25 +323,25 @@ document.addEventListener('DOMContentLoaded', function () {
       const isDown = scrollDirection(currentTop)
       if (currentTop > 56) {
         if (isDown) {
-          if ($nav.classList.contains('visible')) $nav.classList.remove('visible')
+          if ($header.classList.contains('nav-visible')) $header.classList.remove('nav-visible')
           if (isChatBtnShow && isChatShow === true) {
             chatBtnHide()
             isChatShow = false
           }
         } else {
-          if (!$nav.classList.contains('visible')) $nav.classList.add('visible')
+          if (!$header.classList.contains('nav-visible')) $header.classList.add('nav-visible')
           if (isChatBtnHide && isChatShow === false) {
             chatBtnShow()
             isChatShow = true
           }
         }
-        $nav.classList.add('fixed')
+        $header.classList.add('nav-fixed')
         if (window.getComputedStyle($rightside).getPropertyValue('opacity') === '0') {
           $rightside.style.cssText = 'opacity: 1; transform: translateX(-38px)'
         }
       } else {
         if (currentTop === 0) {
-          $nav.classList.remove('fixed', 'visible')
+          $header.classList.remove('nav-fixed', 'nav-visible')
         }
         $rightside.style.cssText = "opacity: ''; transform: ''"
       }
@@ -451,7 +448,7 @@ document.addEventListener('DOMContentLoaded', function () {
       let currentIndex = ''
 
       list.forEach(function (ele, index) {
-        if (top > btf.getEleTop(ele) - 70) {
+        if (top > btf.getEleTop(ele) - 80) {
           currentId = '#' + encodeURI(ele.getAttribute('id'))
           currentIndex = index
         }
@@ -490,7 +487,20 @@ document.addEventListener('DOMContentLoaded', function () {
  */
   const rightSideFn = {
     switchReadMode: () => { // read-mode
-      document.body.classList.toggle('read-mode')
+      const $body = document.body
+      $body.classList.add('read-mode')
+      const newEle = document.createElement('button')
+      newEle.type = 'button'
+      newEle.className = 'fas fa-sign-out-alt exit-readmode'
+      $body.appendChild(newEle)
+
+      function clickFn () {
+        $body.classList.remove('read-mode')
+        newEle.remove()
+        newEle.removeEventListener('click', clickFn)
+      }
+
+      newEle.addEventListener('click', clickFn)
     },
     switchDarkMode: () => { // Switch Between Light And Dark Mode
       const nowMode = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
@@ -525,17 +535,16 @@ document.addEventListener('DOMContentLoaded', function () {
     adjustFontSize: (plus) => {
       const fontSizeVal = parseInt(window.getComputedStyle(document.documentElement).getPropertyValue('--global-font-size'))
       let newValue = ''
-      detectFontSizeChange = true
       if (plus) {
         if (fontSizeVal >= 20) return
         newValue = fontSizeVal + 1
         document.documentElement.style.setProperty('--global-font-size', newValue + 'px')
-        !document.getElementById('nav').classList.contains('hide-menu') && adjustMenu()
+        !document.getElementById('nav').classList.contains('hide-menu') && adjustMenu(true)
       } else {
         if (fontSizeVal <= 10) return
         newValue = fontSizeVal - 1
         document.documentElement.style.setProperty('--global-font-size', newValue + 'px')
-        document.getElementById('nav').classList.contains('hide-menu') && adjustMenu()
+        document.getElementById('nav').classList.contains('hide-menu') && adjustMenu(true)
       }
 
       saveToLocal.set('global-font-size', newValue, 2)
@@ -787,6 +796,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const unRefreshFn = function () {
     window.addEventListener('resize', adjustMenu)
+    window.addEventListener('orientationchange', () => { setTimeout(adjustMenu(true), 100) })
 
     clickFnOfSubMenu()
     GLOBAL_CONFIG.islazyload && lazyloadImg()
