@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>LikiBlaze</title>
+  <title>Thomitics</title>
   
   <subtitle>Welcome!!!</subtitle>
   <link href="https://blog.foxex.cn/atom.xml" rel="self"/>
@@ -10,7 +10,7 @@
   <id>https://blog.foxex.cn/</id>
   
   <author>
-    <name>LikiBlaze</name>
+    <name>Thomitics</name>
     
   </author>
   
