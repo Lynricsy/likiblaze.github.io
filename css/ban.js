@@ -10,3 +10,5 @@ function unmouse(){
 	}
 }
 unmouse()
+document.οncοntextmenu=new Function("event.returnValue=false");
+document.onselectstart=new Function("event.returnValue=false");
